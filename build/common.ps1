@@ -168,9 +168,9 @@ Function Install-DotnetCLI {
 
     $installDotnet = Join-Path $CLIRoot "dotnet-install.ps1"
 
-    wget 'https://raw.githubusercontent.com/dotnet/cli/rel/1.0.0-preview2/scripts/obtain/dotnet-install.ps1' -OutFile $installDotnet
+    wget 'https://raw.githubusercontent.com/dotnet/cli/feature/msbuild/scripts/obtain/dotnet-install.ps1' -OutFile $installDotnet
 
-    & $installDotnet -Channel preview -i $CLIRoot -Version 1.0.0-preview2-003121
+    & $installDotnet -Channel preview -i $CLIRoot -Version 1.0.0-feature-msbuild-003178
 
     if (-not (Test-Path $DotNetExe)) {
         Error-Log "Unable to find dotnet.exe. The CLI install may have failed." -Fatal
