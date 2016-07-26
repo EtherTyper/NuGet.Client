@@ -112,7 +112,7 @@ function Test-InstallPackageWithFileProtocolSource {
 	$package = "Rules"
 	$project = New-ConsoleApplication
 	$source = "file://Rules"
-	$message = "Unsupported type of source  '$source'. Please provide an http or local source."
+	$message = "Unsupported type of source '$source'. Please provide an http or local source."
 
 	# Act & Assert
 	Assert-Throws { Install-Package $package -ProjectName $project.Name -source $source } $message
@@ -123,7 +123,7 @@ function Test-InstallPackageWithFtpProtocolSource {
 	$package = "Rules"
 	$project = New-ConsoleApplication
 	$source = "ftp://Rules"
-	$message = "Unsupported type of source  '$source'. Please provide an http or local source."
+	$message = "Unsupported type of source '$source'. Please provide an http or local source."
 
 	# Act & Assert
 	Assert-Throws { Install-Package $package -ProjectName $project.Name -source $source } $message
@@ -1556,7 +1556,7 @@ function Test-InstallPackageThrowsWhenSourceIsInvalid {
     $p = New-WebApplication 
 
     # Act & Assert
-    Assert-Throws { Install-Package jQuery -source "d:package" } "Failed to retrieve information from remote source 'd:package'.`r`n  Invalid URI: A Dos path must be rooted, for example, 'c:\'."
+    Assert-Throws { Install-Package jQuery -source "d:package" } "Unsupported type of source 'd:package'. Please provide an HTTP or local source."
 }
 
 function Test-InstallPackageInvokeInstallScriptWhenProjectNameHasApostrophe {
