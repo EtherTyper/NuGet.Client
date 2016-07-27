@@ -60,7 +60,7 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
         {
             CheckSolutionState();
 
-            var result = ValidateSource(Source, validateSource: true);
+            var result = ValidateSource(Source);
             if (result.Validity == SourceValidity.UnknownSource)
             {
                 throw new PackageSourceException(string.Format(
@@ -77,7 +77,7 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
                     result.Source));
             }
 
-            UpdateActiveSourceRepository(result);
+            UpdateActiveSourceRepository(result.SourceRepository);
             GetNuGetProject(ProjectName);
             DetermineFileConflictAction();
             NuGetUIThreadHelper.JoinableTaskFactory.Run(CheckMissingPackagesAsync);

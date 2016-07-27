@@ -276,7 +276,7 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
 
         #region Cmdlets base APIs
 
-        protected SourceValidationResult ValidateSource(string source, bool validateSource)
+        protected SourceValidationResult ValidateSource(string source)
         {
             // If source string is not specified, get the current active package source from the host.
             if (string.IsNullOrEmpty(source))
@@ -299,21 +299,17 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
                 return SourceValidationResult.None;
             }
 
-            return CheckSourceValidity(source, validateSource);
+            return CheckSourceValidity(source);
         }
 
-        protected void UpdateActiveSourceRepository(string source, bool validateSource)
+        protected void UpdateActiveSourceRepository(string source)
         {
-            var result = ValidateSource(source, validateSource);
-
-            UpdateActiveSourceRepository(result);
+            var result = ValidateSource(source);
+            EnsureValidSource(result);
+            UpdateActiveSourceRepository(result.SourceRepository);
         }
 
-        /// <summary>
-        /// Initializes source repositories for PowerShell cmdlets, based on config, source string, and/or host active source property value.
-        /// </summary>
-        /// <param name="source">The source string specified by -Source switch.</param>
-        protected void UpdateActiveSourceRepository(SourceValidationResult result)
+        protected void EnsureValidSource(SourceValidationResult result)
         {
             if (result.Validity == SourceValidity.UnknownSource)
             {
@@ -329,9 +325,17 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
                     Strings.UnknownSourceType,
                     result.Source));
             }
-            else if (result.Validity == SourceValidity.Valid)
+        }
+
+        /// <summary>
+        /// Initializes source repositories for PowerShell cmdlets, based on config, source string, and/or host active source property value.
+        /// </summary>
+        /// <param name="source">The source string specified by -Source switch.</param>
+        protected void UpdateActiveSourceRepository(SourceRepository sourceRepository)
+        {
+            if (sourceRepository != null)
             {
-                _activeSourceRepository = result.SourceRepository;
+                _activeSourceRepository = sourceRepository;
             }
 
             EnabledSourceRepositories = _sourceRepositoryProvider?.GetRepositories()
@@ -374,7 +378,7 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
         /// </summary>
         /// <param name="source">The source string specified by -Source switch.</param>
         /// <returns>The source validation result.</returns>
-        private SourceValidationResult CheckSourceValidity(string source, bool validateSource)
+        private SourceValidationResult CheckSourceValidity(string source)
         {
             // Convert a relative local URI into an absolute URI
             var packageSource = new PackageSource(source);
@@ -395,7 +399,7 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
                     return SourceValidationResult.UnknownSource(source);
                 }
             }
-            else if (validateSource && !packageSource.IsHttp)
+            else if (!packageSource.IsHttp)
             {
                 // Throw and unknown source type error if the specified source is neither local nor http
                 return SourceValidationResult.UnknownSourceType(source);

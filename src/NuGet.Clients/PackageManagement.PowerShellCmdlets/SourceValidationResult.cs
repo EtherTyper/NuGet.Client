@@ -29,7 +29,7 @@ namespace NuGet.PackageManagement.PowerShellCmdlets
                 throw new ArgumentNullException(nameof(source));
             }
 
-            if (source == null)
+            if (sourceRepository == null)
             {
                 throw new ArgumentNullException(nameof(sourceRepository));
             }
