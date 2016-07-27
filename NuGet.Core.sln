@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NuGet.CommandLine.XPlat", "src\NuGet.Core\NuGet.CommandLine.XPlat\NuGet.CommandLine.XPlat.xproj", "{ECEA066F-F40D-4397-B2CE-8CA24AC22638}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NuGet.BuildTasks", "src\NuGet.Core\NuGet.BuildTasks\NuGet.BuildTasks.xproj", "{E09441B8-8D74-4A96-8431-480E2065F844}"
+EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NuGet.Client", "src\NuGet.Core\NuGet.Client\NuGet.Client.xproj", "{BA3543A8-874C-4F42-8757-C7EF7D17C8EE}"
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NuGet.Versioning", "src\NuGet.Core\NuGet.Versioning\NuGet.Versioning.xproj", "{24E62AB7-64E4-4975-9417-883559D1BC19}"
@@ -129,8 +131,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{DE23D0
 		Shared\TypeExtensions.cs = Shared\TypeExtensions.cs
 		Shared\TypeInfo.cs = Shared\TypeInfo.cs
 	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "NuGet.BuildTasks", "src\NuGet.BuildTasks\NuGet.BuildTasks.xproj", "{E09441B8-8D74-4A96-8431-480E2065F844}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

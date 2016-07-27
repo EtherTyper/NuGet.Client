@@ -21,28 +21,8 @@ namespace NuGet.Commands
             string inputPath,
             RestoreArgs restoreContext)
         {
-            var paths = new List<string>();
-            var requests = new List<RestoreSummaryRequest>();
-
             var lines = File.ReadAllLines(inputPath);
-            var msbuildProvider = new MSBuildProjectReferenceProvider(lines);
-
-            var entryPoints = msbuildProvider.GetEntryPoints();
-
-            // Create a request for each top level project with project.json
-            foreach (var entryPoint in entryPoints)
-            {
-                if (entryPoint.PackageSpecPath != null && entryPoint.MSBuildProjectPath != null)
-                {
-                    var request = Create(
-                        entryPoint,
-                        msbuildProvider,
-                        restoreContext,
-                        settingsOverride: null);
-
-                    requests.Add(request);
-                }
-            }
+            var requests = GetRequestsFromGraph(restoreContext, lines);
 
             return Task.FromResult<IReadOnlyList<RestoreSummaryRequest>>(requests);
         }
@@ -109,6 +89,30 @@ namespace NuGet.Commands
                 sources);
 
             return summaryRequest;
+        }
+
+        protected List<RestoreSummaryRequest> GetRequestsFromGraph(RestoreArgs restoreContext, string[] lines)
+        {
+            var requests = new List<RestoreSummaryRequest>();
+            var msbuildProvider = new MSBuildProjectReferenceProvider(lines);
+            var entryPoints = msbuildProvider.GetEntryPoints();
+
+            // Create a request for each top level project with project.json
+            foreach (var entryPoint in entryPoints)
+            {
+                if (entryPoint.PackageSpecPath != null && entryPoint.MSBuildProjectPath != null)
+                {
+                    var request = Create(
+                        entryPoint,
+                        msbuildProvider,
+                        restoreContext,
+                        settingsOverride: null);
+
+                    requests.Add(request);
+                }
+            }
+
+            return requests;
         }
     }
 }

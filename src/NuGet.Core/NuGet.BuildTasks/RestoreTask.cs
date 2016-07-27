@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -24,7 +25,11 @@ namespace NuGet.BuildTasks
 
         public override bool Execute()
         {
+            Debugger.Launch();
+
             var log = new MSBuildLogger(Log);
+            var graphId = Guid.NewGuid().ToString();
+            var graphLines = RestoreGraphItems.Select(item => item.ToString()).ToArray();
 
             using (var cacheContext = new SourceCacheContext())
             {
@@ -34,10 +39,10 @@ namespace NuGet.BuildTasks
 
                 // Ordered request providers
                 var providers = new List<IRestoreRequestProvider>();
-                providers.Add(new MSBuildP2PRestoreRequestProvider(providerCache));
+                providers.Add(new MemoryMSBuildP2PRestoreRequestProvider(providerCache, graphId, graphLines));
 
-                ISettings defaultSettings = Settings.LoadDefaultSettings(root: null, configFileName: null, machineWideSettings: null);
-                CachingSourceProvider sourceProvider = new CachingSourceProvider(new PackageSourceProvider(defaultSettings));
+                var defaultSettings = Settings.LoadDefaultSettings(root: null, configFileName: null, machineWideSettings: null);
+                var sourceProvider = new CachingSourceProvider(new PackageSourceProvider(defaultSettings));
 
                 var restoreContext = new RestoreArgs()
                 {
@@ -46,7 +51,7 @@ namespace NuGet.BuildTasks
                     ConfigFile = null,
                     DisableParallel = false,
                     GlobalPackagesFolder = null,
-                    Inputs = new List<string>(),
+                    Inputs = new List<string>() { graphId },
                     Log = log,
                     MachineWideSettings = new XPlatMachineWideSetting(),
                     RequestProviders = providers,
