@@ -2016,11 +2016,11 @@ function Test-InstallPackageThrowsIfThereIsNoCompatibleContentFiles
     param($context)
 
     # Arrange
-    $project = New-PortableLibrary
+    $project = New-JavaScriptApplication
     
     # Act & Assert
 
-    Assert-Throws { Install-Package TestTargetFxContentFiles -Project $project.Name -Source $context.RepositoryPath } "Could not install package 'TestTargetFxContentFiles 1.0.0'. You are trying to install this package into a project that targets '.NETPortable,Version=v4.5,Profile=`$targetframeworkprofile`$', but the package does not contain any assembly references or content files that are compatible with that framework. For more information, contact the package author."
+    Assert-Throws { Install-Package TestTargetFxContentFiles -Project $project.Name -Source $context.RepositoryPath } "Could not install package 'TestTargetFxContentFiles 1.0.0'. You are trying to install this package into a project that targets 'Windows,Version=v8.1', but the package does not contain any assembly references or content files that are compatible with that framework. For more information, contact the package author."
     Assert-NoPackage $project TestTargetFxContentFiles
 }
 
