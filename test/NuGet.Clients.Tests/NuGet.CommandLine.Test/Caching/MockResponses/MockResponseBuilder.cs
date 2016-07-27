@@ -33,7 +33,7 @@ namespace NuGet.CommandLine.Test.Caching
             var id = identity.Id.ToLowerInvariant();
             var version = identity.Version.ToNormalizedString().ToLowerInvariant();
 
-            return $"/flat/{id}.{version}/{id}.{version}.nupkg";
+            return $"/flat/{id}/{version}/{id}.{version}.nupkg";
         }
 
         public string GetDownloadUrl(PackageIdentity identity)
