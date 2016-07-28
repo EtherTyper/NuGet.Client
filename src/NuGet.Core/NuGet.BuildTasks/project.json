@@ -3,7 +3,6 @@
 
   "description": "NuGet 3 restore for dotnet CLI",
   "buildOptions": {
-    "emitEntryPoint": false,
     "warningsAsErrors": true,
     "xmlDoc": true,
     "nowarn": [
@@ -17,10 +16,28 @@
   },
 
   "dependencies": {
+    "NuGet.Commands": {
+      "target": "project"
+    }
   },
 
   "frameworks": {
-    "netcoreapp1.0": {
+    "net46": {
+      "define": [
+        "IS_DESKTOP"
+      ],
+      "dependencies": {
+      },
+      "frameworkAssemblies": {
+        "Microsoft.Build.Utilities.v4.0": {
+          "type": "build"
+        },
+        "Microsoft.Build.Framework": {
+          "type": "build"
+        }
+      }
+    },
+    "netstandard1.3": {
       "imports": "portable-net45+win8",
       "buildOptions": {
         "define": [
@@ -28,15 +45,10 @@
         ]
       },
       "dependencies": {
+        "NETStandard.Library": "1.6.0",
         "Microsoft.Build.Framework": "0.1.0-preview-00024-160610",
-        "Microsoft.Build.Utilities.Core": "0.1.0-preview-00024-160610",
-        "NuGet.Commands": {
-          "target": "project"
-        },
-        "Microsoft.NETCore.App": {
-          "type": "platform",
-          "version": "1.0.0"
-        }
+        "Microsoft.Build.Tasks.Core": "0.1.0-preview-00024-160610",
+        "Microsoft.Build.Utilities.Core": "0.1.0-preview-00024-160610"
       }
     }
   }

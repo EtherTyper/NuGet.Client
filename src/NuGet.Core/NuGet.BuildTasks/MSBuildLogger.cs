@@ -1,4 +1,5 @@
-﻿using Microsoft.Build.Utilities;
+﻿using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 using NuGet.Common;
 
 namespace NuGet.BuildTasks
@@ -6,7 +7,7 @@ namespace NuGet.BuildTasks
     /// <summary>
     /// TaskLoggingHelper -> ILogger
     /// </summary>
-    internal class MSBuildLogger : ILogger
+    internal class MSBuildLogger : Common.ILogger
     {
         private readonly TaskLoggingHelper _taskLogging;
 
@@ -17,7 +18,7 @@ namespace NuGet.BuildTasks
 
         public void LogDebug(string data)
         {
-            _taskLogging.LogMessage(data);
+            _taskLogging.LogMessage(MessageImportance.Low, data);
         }
 
         public void LogError(string data)

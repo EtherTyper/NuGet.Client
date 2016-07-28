@@ -42,6 +42,8 @@ namespace NuGet.Commands
 
         public List<IRestoreRequestProvider> RequestProviders { get; set; } = new List<IRestoreRequestProvider>();
 
+        public List<IPreLoadedRestoreRequestProvider> PreLoadedRequestProviders { get; set; } = new List<IPreLoadedRestoreRequestProvider>();
+
         public PackageSaveMode PackageSaveMode { get; set; } = PackageSaveMode.Defaultv3;
 
         public int? LockFileVersion { get; set; }

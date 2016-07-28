@@ -25,11 +25,12 @@ namespace NuGet.BuildTasks
 
         public override bool Execute()
         {
+            var log = new MSBuildLogger(Log);
+            var graphLines = RestoreGraphItems.Select(item => item.ToString()).ToArray();
+
             Debugger.Launch();
 
-            var log = new MSBuildLogger(Log);
-            var graphId = Guid.NewGuid().ToString();
-            var graphLines = RestoreGraphItems.Select(item => item.ToString()).ToArray();
+            log.LogDebug($"Graph size: {graphLines.Length}");
 
             using (var cacheContext = new SourceCacheContext())
             {
@@ -38,8 +39,8 @@ namespace NuGet.BuildTasks
                 var providerCache = new RestoreCommandProvidersCache();
 
                 // Ordered request providers
-                var providers = new List<IRestoreRequestProvider>();
-                providers.Add(new MemoryMSBuildP2PRestoreRequestProvider(providerCache, graphId, graphLines));
+                var providers = new List<IPreLoadedRestoreRequestProvider>();
+                providers.Add(new PreLoadedRestoreRequestProvider(providerCache, graphLines));
 
                 var defaultSettings = Settings.LoadDefaultSettings(root: null, configFileName: null, machineWideSettings: null);
                 var sourceProvider = new CachingSourceProvider(new PackageSourceProvider(defaultSettings));
@@ -51,10 +52,10 @@ namespace NuGet.BuildTasks
                     ConfigFile = null,
                     DisableParallel = false,
                     GlobalPackagesFolder = null,
-                    Inputs = new List<string>() { graphId },
+                    Inputs = new List<string>(),
                     Log = log,
                     MachineWideSettings = new XPlatMachineWideSetting(),
-                    RequestProviders = providers,
+                    PreLoadedRequestProviders = providers,
                     Sources = new List<string>(),
                     FallbackSources = new List<string>(),
                     CachingSourceProvider = sourceProvider
